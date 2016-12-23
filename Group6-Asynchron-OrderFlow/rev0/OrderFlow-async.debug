@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpdb:Debug xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:bpdb="http://simtech.de/bpel/debug" processName="OrderFlow-async" processPath="C:\Users\ebnert\OneDrive for Business\Documents\Studium - Master\Semester 3\Business Process Management\Labs\bpmlabs\Group6-Asynchron-OrderFlow\rev0\OrderFlow-async.bpel">
+  <globalBreakpoints/>
+  <localBreakpoints/>
+</bpdb:Debug>

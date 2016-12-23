@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpdb:Debug xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:bpdb="http://simtech.de/bpel/debug" processName="OrderFlow" processPath="C:\Users\ebnert\Downloads\workspace\Group6-Synchron-OrderFlow\rev0\OrderFlow.bpel">
+  <globalBreakpoints>
+    <breakpoint name="" targetXPath="/process" targetName="OrderFlow"/>
+  </globalBreakpoints>
+  <localBreakpoints>
+    <breakpoint name="" targetXPath="/process/sequence[1]" targetName="main"/>
+    <breakpoint name="" targetXPath="/process/sequence[1]/receive[1]" targetName="receiveInput"/>
+    <breakpoint name="" targetXPath="/process/sequence[1]/forEach[1]/scope[1]" targetName="CheckAvailabilityOfEachProductScope"/>
+  </localBreakpoints>
+</bpdb:Debug>

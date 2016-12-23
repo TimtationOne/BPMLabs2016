@@ -1,0 +1,30 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:tns="http://de.ustutt.simtech">
+   <soapenv:Header/>
+   <soapenv:Body>
+	<tns:OrderFlow-asyncRequest xmlns:tns="http://de.ustutt.simtech" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	  <tns:input>
+	    <tns:callbackUrl>http://localhost:32980/ode/processes/InventoryCallbackService/InventoryCallbackPort</tns:callbackUrl>
+	    <tns:orderId>OrderX</tns:orderId>
+	    <tns:customerId>Company420</tns:customerId>
+	    <tns:products>
+	      <tns:product>
+	        <tns:productId>56039c30-f039-42a7-94e5-fc364b909ba1</tns:productId>
+	        <tns:numberOfItems>2</tns:numberOfItems>
+	      </tns:product>
+	      <tns:product>
+	        <tns:productId>44162d90-9315-4acc-980e-cf975c6b9397</tns:productId>
+	        <tns:numberOfItems>2</tns:numberOfItems>
+	      </tns:product>
+	    </tns:products>
+	    <tns:shippingAddress>tns:shippingAddress</tns:shippingAddress>
+	    <tns:shippingDate>2017-04-20</tns:shippingDate>
+	    <tns:paymentDetails>
+	      <tns:bankName>tns:bankName</tns:bankName>
+	      <tns:bankAddress>tns:bankAddress</tns:bankAddress>
+	      <tns:accountNumber>tns:accountNumber</tns:accountNumber>
+	      <tns:accountHolderName>tns:accountHolderName</tns:accountHolderName>
+	    </tns:paymentDetails>
+	  </tns:input>
+	</tns:OrderFlow-asyncRequest>
+   </soapenv:Body>
+</soapenv:Envelope>

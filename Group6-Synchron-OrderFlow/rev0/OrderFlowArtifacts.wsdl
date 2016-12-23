@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:plnk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://de.ustutt.simtech" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:wsdl="http://iaas.uni-stuttgart.de/labs/FlowSOG" name="OrderFlow" targetNamespace="http://de.ustutt.simtech">
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     TYPE DEFINITION - List of types participating in this BPEL process 
+     The BPEL Designer will generate default request and response types
+     but you can define or import any XML Schema type and use them as part 
+     of the message types.
+     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->    
+    <plnk:partnerLinkType name="InventoryType">
+    <plnk:role name="InventoryRole" portType="wsdl:InventoryPortType"/>
+  </plnk:partnerLinkType>
+    <plnk:partnerLinkType name="OrderType">
+    <plnk:role name="OrderRole" portType="wsdl:OrderPortType"/>
+  </plnk:partnerLinkType>
+    <plnk:partnerLinkType name="ShipmentType">
+    <plnk:role name="ShipmentRole" portType="wsdl:ShipmentPortType"/>
+  </plnk:partnerLinkType>
+    <plnk:partnerLinkType name="PaymentType">
+    <plnk:role name="PaymentRole" portType="wsdl:PaymentPortType"/>
+  </plnk:partnerLinkType>
+    <import location="BPMN.wsdl" namespace="http://iaas.uni-stuttgart.de/labs/FlowSOG"/>
+    <types>
+        <schema xmlns="http://www.w3.org/2001/XMLSchema" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://de.ustutt.simtech">
+
+            <element name="OrderFlowRequest">
+                <complexType>
+                    <sequence>
+                        <element name="input" type="tns:newOrder"/>
+                    </sequence>
+                </complexType>
+            </element>
+
+            <element name="OrderFlowResponse">
+                <complexType>
+                    <sequence>
+                        <element name="result" type="tns:resultType"/>
+                    </sequence>
+                </complexType>
+            </element>
+            <element name="test" type="string"/>
+        
+        
+        
+            <complexType name="newOrder">
+            	<sequence>
+            		<element name="orderId" type="string" minOccurs="0" maxOccurs="1"></element>
+            		<element name="customerId" type="string" />
+            		<element name="products">
+            			<complexType>
+            				<sequence>
+            					<element maxOccurs="unbounded"
+            						minOccurs="1" name="product">
+            						<complexType>
+            							<sequence>
+            								<element name="productId"
+            									type="string">
+            								</element>
+            								<element
+            									name="numberOfItems" type="integer">
+            								</element>
+            							</sequence>
+            							<anyAttribute />
+            						</complexType>
+            					</element>
+            				</sequence>
+            				<anyAttribute />
+            			</complexType>
+            		</element>
+            		<element name="shippingAddress" type="string" />
+                    <element name="shippingDate" type="date"></element>
+                    <element name="paymentDetails">
+            			<complexType>
+            				<sequence>
+            					<element name="bankName"
+            						type="string">
+            					</element>
+            					<element name="bankAddress"
+            						type="string">
+            					</element>
+            					<element name="accountNumber"
+            						type="string">
+            					</element>
+            					<element name="accountHolderName"
+            						type="string">
+            					</element>
+            				</sequence>
+            				<anyAttribute />
+            			</complexType>
+            		</element>
+            	</sequence>
+            	<anyAttribute/>
+            </complexType>
+        
+            <complexType name="resultType">
+            	<sequence>
+            		<element name="OrderStatus" type="string"></element>
+            		<element name="orderId" type="string"></element>
+            		<element name="customerId" type="string"></element>
+            		<element name="products">
+            			<complexType>
+            				<sequence>
+            					<element name="productId"
+            						type="string">
+            					</element>
+            					<element name="numberOfItems"
+            						type="int">
+            					</element>
+            				</sequence>
+            			</complexType>
+            		</element>
+            		<element name="costs" type="float"></element>
+            		<element name="shippingAddress" type="string"></element>
+            		<element name="shippingDate" type="date"></element>
+            		<element name="paymentDetails">
+            			<complexType>
+            				<sequence>
+            					<element name="bankName"
+            						type="string">
+            					</element>
+            					<element name="bankAddress"
+            						type="string">
+            					</element>
+            					<element name="accountNumber"
+            						type="string">
+            					</element>
+            					<element name="accountHolderName"
+            						type="string">
+            					</element>
+            				</sequence>
+            			</complexType>
+            		</element>
+            		<element name="status" type="string"></element>
+            	</sequence>
+            </complexType>
+        </schema>
+    </types>
+
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     MESSAGE TYPE DEFINITION - Definition of the message types used as 
+     part of the port type defintions
+     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->    
+    <message name="OrderFlowRequestMessage">
+        <part element="tns:OrderFlowRequest" name="payload"/>
+    </message>
+    <message name="OrderFlowResponseMessage">
+        <part element="tns:OrderFlowResponse" name="payload"/>
+    </message>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     PORT TYPE DEFINITION - A port type groups a set of operations into
+     a logical service unit.
+     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->    
+
+    <!-- portType implemented by the OrderFlow BPEL process -->
+    <portType name="OrderFlow">
+        <operation name="process">
+            <input message="tns:OrderFlowRequestMessage"/>
+            <output message="tns:OrderFlowResponseMessage"/>
+        </operation>
+    </portType>   
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     PARTNER LINK TYPE DEFINITION
+     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->    
+    <plnk:partnerLinkType name="OrderFlow">
+        <plnk:role name="OrderFlowProvider" portType="tns:OrderFlow"/>
+    </plnk:partnerLinkType>
+    
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     BINDING DEFINITION - Defines the message format and protocol details
+     for a web service.
+     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+    <binding name="OrderFlowBinding" type="tns:OrderFlow">
+    	<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    	<operation name="process">
+    		<soap:operation soapAction="http://de.ustutt.simtech/process"/>
+    		<input>
+    			<soap:body use="literal"/>
+    		</input>
+    		<output>
+    			<soap:body use="literal"/>
+    		</output>
+    	</operation>
+    </binding>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     SERVICE DEFINITION - A service groups a set of ports into
+     a service unit.
+     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+    <service name="OrderFlowService">
+    	<port binding="tns:OrderFlowBinding" name="OrderFlowPort">
+    		<soap:address location="http://localhost:8080/ode/processes/OrderFlow"/>
+    	</port>
+    </service>
+</definitions>

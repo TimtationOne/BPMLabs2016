@@ -1,0 +1,29 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:tns="http://de.ustutt.simtech">
+   <soapenv:Header/>
+   <soapenv:Body>
+		<tns:OrderFlowRequest xmlns:tns="http://de.ustutt.simtech" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+		  <tns:input>
+		    <tns:orderId>FirstOrder</tns:orderId>
+		    <tns:customerId>Gruppe6</tns:customerId>
+		    <tns:products>
+		      <tns:product>
+		        <tns:productId>56039c30-f039-42a7-94e5-fc364b909ba1</tns:productId>
+		        <tns:numberOfItems>3</tns:numberOfItems>
+		      </tns:product>
+		      <tns:product>
+		        <tns:productId>44162d90-9315-4acc-980e-cf975c6b9397</tns:productId>
+		        <tns:numberOfItems>3</tns:numberOfItems>
+		      </tns:product>
+		    </tns:products>
+		    <tns:shippingAddress>Gruppe 6,Universitaetsstrasse 1, 70862 Stuttgart</tns:shippingAddress>
+			<tns:shippingDate>2017-04-20</tns:shippingDate>
+		    <tns:paymentDetails>
+		      <tns:bankName>Uni Stutgart</tns:bankName>
+		      <tns:bankAddress>Universitaetsstrasse 1, 70862 Stuttgart</tns:bankAddress>
+		      <tns:accountNumber>DE782764276276</tns:accountNumber>
+		      <tns:accountHolderName>IAAS</tns:accountHolderName>
+		    </tns:paymentDetails>
+		  </tns:input>
+		</tns:OrderFlowRequest>
+   </soapenv:Body>
+</soapenv:Envelope>

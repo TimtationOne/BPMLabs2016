@@ -1,0 +1,152 @@
+<html>
+<head>
+    <title>Conduct Order GUI</title>
+    <script type="text/javascript">
+        function soap(async) {
+			// Preparation
+            var xmlhttp = new XMLHttpRequest();
+			if (async == 0) { // sync url
+				xmlhttp.open('POST', 'http://46.101.159.46:'+ document.getElementById("port").value +'/ode/processes/OrderFlow', true);
+			} else { // async url
+				xmlhttp.open('POST', 'http://46.101.159.46:'+ document.getElementById("port").value +'/ode/processes/OrderFlow-async', true);
+			}
+			
+			// Build SOAP Request from input
+			var sr = 
+					'<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:tns="http://de.ustutt.simtech">'+
+					'<soapenv:Header/>'+
+					'<soapenv:Body>';
+					
+			if (async == 0) { // sync request
+				sr += '<tns:OrderFlowRequest xmlns:tns="http://de.ustutt.simtech" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">';
+			} else { // async request
+				sr += '<tns:OrderFlow-asyncRequest xmlns:tns="http://de.ustutt.simtech" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">';
+			}
+					
+			sr +=	'<tns:input>';
+			
+			if (async == 1) { // async --> add callback
+				sr += '<tns:callbackUrl>http://46.101.159.46:' + document.getElementById("port").value + '/ode/processes/InventoryCallbackService/InventoryCallbackPort</tns:callbackUrl>';
+			}
+			
+			sr +=	'<tns:customerId>'+ document.getElementById("customerId").value +'</tns:customerId>'+
+					'<tns:products>';
+					
+			productElements = document.getElementsByName("product");
+			for(var x=1; x <= productElements.length; x++) {
+				sr +=
+					'<tns:product>'+
+					'<tns:productId>' + document.getElementById("productId" + x).value + '</tns:productId>'+
+					'<tns:numberOfItems>' + document.getElementById("numberOfItems" + x).value + '</tns:numberOfItems>'+
+					'</tns:product>';
+			}
+					
+			sr +=	'</tns:products>'+
+					'<tns:shippingAddress>'+ document.getElementById("shippingAddress").value +'</tns:shippingAddress>'+
+					'<tns:shippingDate>'+ document.getElementById("shipmentDate").value +'</tns:shippingDate>'+
+					'<tns:paymentDetails>'+
+					'<tns:bankName>'+ document.getElementById("bankName").value +'</tns:bankName>'+
+					'<tns:bankAddress>'+ document.getElementById("bankAddress").value +'</tns:bankAddress>'+
+					'<tns:accountNumber>'+ document.getElementById("accountNumber").value +'</tns:accountNumber>'+
+					'<tns:accountHolderName>'+ document.getElementById("accountHolderName").value +'</tns:accountHolderName>'+
+					'</tns:paymentDetails>'+
+					'</tns:input>';
+			if (async == 0) { // sync request
+				sr += '</tns:OrderFlowRequest>';
+			} else { // async request
+				sr += '</tns:OrderFlow-asyncRequest>';
+			}		
+					
+			sr +=	'</soapenv:Body>'+
+					'</soapenv:Envelope>';
+			
+			// Send and response processing
+            xmlhttp.onreadystatechange = function () {
+                if (xmlhttp.readyState == 4) {
+                    if (xmlhttp.status == 200) {
+						var matchStr = xmlhttp.response.match(/<tns:OrderStatus>.*<\/tns:OrderStatus>/g);
+						matchStr = matchStr + "";
+						var msgStr = matchStr.replace(/<tns:OrderStatus>/g,"").replace(/<\/tns:OrderStatus>/g,"");
+						alert(msgStr);
+                    }
+                }
+            }
+            xmlhttp.setRequestHeader('Content-Type', 'text/xml');
+            xmlhttp.send(sr);
+        }
+		
+		// GUI extension for multiple products
+		function addproduct() {
+			var number = document.getElementsByName("product").length + 1;
+			var template = 
+				'<div name="product">'+
+				'Product ID:<br>'+
+				'<input type="text" id="productId' + number + '" value="ce33e967-d787-4658-9199-5f5bf5456bb6">'+
+				'<br>'+
+				'Number of Items:<br>'+
+				'<input type="text" id="numberOfItems' + number + '" value="3">'+
+				'<br>'+
+				'<br>'+
+				'</div>';
+			document.getElementById("products").innerHTML += template;
+		}
+		
+		function remproduct() {
+			var list = document.getElementById('products'), item = list.lastElementChild;
+			list.removeChild(item);
+		}
+    </script>
+</head>
+<body>
+	<h1>Conduct Order</h1>
+    <form name="Demo" action="" method="post">
+		<h2>Connection</h2>
+		Port:<br>
+		<input type="text" id="port" value="32955">
+		<br>
+	
+		<h2>Customer</h2>
+		Customer ID:<br>
+		<input type="text" id="customerId" value="Gruppe6">
+		<br>
+		
+		<h2>Products <input type="button" value="+" onclick="addproduct();" /><input type="button" value="-" onclick="remproduct();" /></h2>
+		<div id="products">
+			<div name="product">
+				Product ID:<br>
+				<input type="text" id="productId1" value="56039c30-f039-42a7-94e5-fc364b909ba1">
+				<br>
+				Number of Items:<br>
+				<input type="text" id="numberOfItems1" value="11">
+				<br>
+			</div>
+			
+		</div>
+		<h2>Shipping and Payment</h2>
+		Shipping Address:<br>
+		<input type="text" id="shippingAddress" value="Gruppe 6, Universitaetsstrasse 38, 70569 Stuttgart">
+		<br>
+		Bank Name:<br>
+		<input type="text" id="bankName" value="Lehman Brothers Holding Inc">
+		<br>
+		Bank Address:<br>
+		<input type="text" id="bankAddress" value="New York City, New York, Vereinigte Staaten">
+		<br>
+		Account Number:<br>
+		<input type="text" id="accountNumber" value="US0124882487481787241">
+		<br>
+		Account Holder Name:<br>
+		<input type="text" id="accountHolderName" value="IAAS Uni Stuttgart">
+		<br>
+		Date of Shipment:<br>
+		<input type="text" id="shipmentDate" value="2017-04-20">
+		<br>
+		<br>
+	
+        <div>
+            <input type="button" value="Sync" onclick="soap(0);" />
+            <input type="button" value="Async" onclick="soap(1);" />
+        </div>
+    </form>
+</body>
+<html>

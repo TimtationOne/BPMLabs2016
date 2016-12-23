@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<deploy xmlns="http://www.apache.org/ode/schemas/dd/2007/03" xmlns:FlowSOG="http://iaas.uni-stuttgart.de/labs/FlowSOG" xmlns:de.ustutt.simtech="http://de.ustutt.simtech">
+  <process name="de.ustutt.simtech:OrderFlow">
+    <metaData>
+      <mdProperty name="version" value="1.0"/>
+    </metaData>
+    <process-events generate="all"/>
+    <provide partnerLink="client">
+      <service name="de.ustutt.simtech:OrderFlowService" port="OrderFlowPort"/>
+    </provide>
+    <invoke partnerLink="InventoryLink">
+      <service name="FlowSOG:InventoryService" port="InventoryPort"/>
+    </invoke>
+    <invoke partnerLink="OrderLink">
+      <service name="FlowSOG:OrderService" port="OrderPort"/>
+    </invoke>
+    <invoke partnerLink="ShipmentLink">
+      <service name="FlowSOG:ShipmentService" port="ShipmentPort"/>
+    </invoke>
+    <invoke partnerLink="PaymentLink">
+      <service name="FlowSOG:PaymentService" port="PaymentPort"/>
+    </invoke>
+  </process>
+</deploy>
